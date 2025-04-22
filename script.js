@@ -1,3 +1,7 @@
+// Replace with your actual AIML API key
+const apiKey = 'YOUR_AIML_API_KEY';
+
+// Start the game
 function startGame() {
   const name = document.getElementById('name').value;
   const age = parseInt(document.getElementById('age').value);
@@ -6,14 +10,14 @@ function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
 
-    // Depending on age, determine mode (Adventure for kids or Explorer for adults)
+    // Based on age, choose quiz type
     if (age < 13) {
       alert("You are in Adventure Mode!");
-      // Generate kid-friendly question
+      // Call AIML API to get a kid-friendly question
       generateQuestion('kids');
     } else {
       alert("You are in Explorer Mode!");
-      // Generate adult-friendly question
+      // Call AIML API to get an adult-friendly question
       generateQuestion('adults');
     }
   } else {
@@ -21,22 +25,42 @@ function startGame() {
   }
 }
 
+// Generate quiz question based on age group (kids/adults)
 function generateQuestion(mode) {
-  // This function will later call the GenAI API to fetch a question based on the mode
-  const question = "What is 2 + 2?";
-  const options = ["3", "4", "5", "6"];
+  const subject = "math";  // Default subject, but you can allow user to select subject
   
-  document.getElementById('question').innerText = question;
-  const buttons = document.querySelectorAll('.option');
-  
-  for (let i = 0; i < options.length; i++) {
-    buttons[i].innerText = options[i];
-  }
+  // Construct the API request for AIML
+  const requestBody = {
+    prompt: `Generate a ${mode} quiz question on ${subject}`,
+    apiKey: apiKey  // Attach your AIML API key
+  };
+
+  fetch('https://api.aiml.ai/v1/query', {  // Replace with the correct AIML endpoint
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestBody)
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Assuming the response contains a question and options (adjust based on AIML response format)
+    const question = data.response.question;
+    const options = data.response.options || ["Option 1", "Option 2", "Option 3", "Option 4"];
+
+    document.getElementById('question').innerText = question;
+    const buttons = document.querySelectorAll('.option');
+    
+    for (let i = 0; i < options.length; i++) {
+      buttons[i].innerText = options[i];
+    }
+  })
+  .catch(error => console.error('Error fetching data from AIML API:', error));
 }
 
+// Check answer based on selected option
 function checkAnswer(selectedOption) {
-  // This function will check if the selected option is correct
-  const correctAnswer = 2;  // Option 2 (4) is correct
+  const correctAnswer = 2;  // Example: assume Option 2 is the correct answer
   if (selectedOption === correctAnswer) {
     alert("Correct!");
   } else {
