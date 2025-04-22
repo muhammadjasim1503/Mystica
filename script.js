@@ -1,69 +1,41 @@
-// Replace with your actual AIML API key
-const apiKey = 'YOUR_AIML_API_KEY';
+// Assuming you have a form for quiz input
+const quizForm = document.getElementById('quiz-form');
+quizForm.addEventListener('submit', async function (event) {
+  event.preventDefault();
 
-// Start the game
-function startGame() {
-  const name = document.getElementById('name').value;
-  const age = parseInt(document.getElementById('age').value);
+  // Get user inputs (prompt, age, subject)
+  const prompt = document.getElementById('quiz-prompt').value;
+  const age = document.getElementById('age-input').value; // Example for age input
+  const subject = document.getElementById('subject-input').value; // Example for subject input
 
-  if (name && age) {
-    document.getElementById('start-screen').style.display = 'none';
-    document.getElementById('game-screen').style.display = 'block';
-
-    // Based on age, choose quiz type
-    if (age < 13) {
-      alert("You are in Adventure Mode!");
-      // Call AIML API to get a kid-friendly question
-      generateQuestion('kids');
-    } else {
-      alert("You are in Explorer Mode!");
-      // Call AIML API to get an adult-friendly question
-      generateQuestion('adults');
-    }
-  } else {
-    alert("Please enter a valid name and age.");
-  }
-}
-
-// Generate quiz question based on age group (kids/adults)
-function generateQuestion(mode) {
-  const subject = "math";  // Default subject, but you can allow user to select subject
-  
-  // Construct the API request for AIML
-  const requestBody = {
-    prompt: `Generate a ${mode} quiz question on ${subject}`,
-    apiKey: apiKey  // Attach your AIML API key
+  // Prepare the request body
+  const requestData = {
+    prompt: prompt,
+    age: parseInt(age),
+    subject: subject,
   };
 
-  fetch('https://api.aiml.ai/v1/query', {  // Replace with the correct AIML endpoint
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody)
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Assuming the response contains a question and options (adjust based on AIML response format)
-    const question = data.response.question;
-    const options = data.response.options || ["Option 1", "Option 2", "Option 3", "Option 4"];
+  try {
+    // Call the Netlify serverless function
+    const response = await fetch('/.netlify/functions/quiz', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData),
+    });
 
-    document.getElementById('question').innerText = question;
-    const buttons = document.querySelectorAll('.option');
+    const data = await response.json();
     
-    for (let i = 0; i < options.length; i++) {
-      buttons[i].innerText = options[i];
+    // Handle the quiz question
+    if (data.question) {
+      // Display the generated question (you can customize this part)
+      document.getElementById('quiz-output').textContent = data.question;
+    } else {
+      document.getElementById('quiz-output').textContent = 'Sorry, something went wrong.';
     }
-  })
-  .catch(error => console.error('Error fetching data from AIML API:', error));
-}
-
-// Check answer based on selected option
-function checkAnswer(selectedOption) {
-  const correctAnswer = 2;  // Example: assume Option 2 is the correct answer
-  if (selectedOption === correctAnswer) {
-    alert("Correct!");
-  } else {
-    alert("Incorrect. Try again!");
+  } catch (error) {
+    console.error('Error:', error);
+    document.getElementById('quiz-output').textContent = 'Error generating quiz question.';
   }
-}
+});
