@@ -3,35 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mystica - A World of Quests</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Mystica - Fun Quiz Game</title>
+  <link rel="stylesheet" href="style.css"> <!-- Link to your CSS if needed -->
 </head>
 <body>
-  <div class="game-container">
-    <h1>Welcome to Mystica</h1>
-    <p>Embark on an adventure filled with quests and knowledge!</p>
+  <div class="container">
+    <h1>Welcome to Mystica - Fun Quiz Game!</h1>
     
-    <div id="start-screen">
-      <label for="name">Enter your name:</label>
-      <input type="text" id="name" placeholder="Your name">
+    <!-- Quiz Form -->
+    <form id="quiz-form">
+      <label for="quiz-prompt">Enter your question prompt:</label>
+      <input type="text" id="quiz-prompt" placeholder="e.g. 'What is 2 + 2?'" required>
       
-      <label for="age">Enter your age:</label>
-      <input type="number" id="age" placeholder="Your age">
+      <label for="age-input">Your age:</label>
+      <input type="number" id="age-input" placeholder="Enter your age" min="1" required>
       
-      <button onclick="startGame()">Start Game</button>
-    </div>
+      <label for="subject-input">Select Subject:</label>
+      <select id="subject-input" required>
+        <option value="Math">Math</option>
+        <option value="Science">Science</option>
+        <option value="History">History</option>
+        <!-- Add other subjects as needed -->
+      </select>
+      
+      <button type="submit">Generate Quiz Question</button>
+    </form>
 
-    <div id="game-screen" style="display:none;">
-      <div id="question-container">
-        <p id="question"></p>
-        <button class="option" onclick="checkAnswer(1)">Option 1</button>
-        <button class="option" onclick="checkAnswer(2)">Option 2</button>
-        <button class="option" onclick="checkAnswer(3)">Option 3</button>
-        <button class="option" onclick="checkAnswer(4)">Option 4</button>
-      </div>
-    </div>
+    <!-- Display the generated quiz question here -->
+    <div id="quiz-output"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js"></script> <!-- Link to your JavaScript -->
 </body>
 </html>
