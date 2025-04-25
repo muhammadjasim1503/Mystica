@@ -27,10 +27,10 @@ quizForm.addEventListener('submit', async function (event) {
 
     const data = await response.json();
     
-    // Handle the quiz question
-    if (data.question) {
+    // Handle the quiz question - updated to check 'answer' field
+    if (data.answer) {
       // Display the generated question (you can customize this part)
-      document.getElementById('quiz-output').textContent = data.question;
+      document.getElementById('quiz-output').textContent = data.answer;
     } else {
       document.getElementById('quiz-output').textContent = 'Sorry, something went wrong.';
     }
