@@ -8,12 +8,12 @@
     "dev": "netlify dev"
   },
   "dependencies": {
-    "node-fetch": "^3.0.0",    // To make API requests
-    "dotenv": "^16.0.0"        // To securely load environment variables (like API keys)
+    "node-fetch": "^3.0.0",    
+    "dotenv": "^16.0.0"        
   },
   "devDependencies": {},
   "engines": {
-    "node": "16.x"  // Ensure the correct Node.js version is used by Netlify
+    "node": "16.x"  
   },
   "license": "ISC"
 }
