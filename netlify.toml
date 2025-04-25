@@ -1,0 +1,14 @@
+[build]
+  # Directory where the build output will be placed
+  publish = "public"
+  # Directory containing your serverless functions
+  functions = "netlify/functions"
+
+[dev]
+  # Optional: settings for local development if needed
+  command = "npm run dev"
+  port = 8888
+
+
+[[plugins]]
+  package = "@netlify/plugin-functions-core"
