@@ -5,6 +5,14 @@ exports.handler = async function(event, context) {
     // Extract data from the request body
     const { prompt, age, subject } = JSON.parse(event.body);
 
+    // Make sure all necessary fields are provided
+    if (!prompt || !age || !subject) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Missing prompt, age, or subject' })
+      };
+    }
+
     // Send a POST request to the AIML API
     const response = await fetch("https://api.aimlapi.com/v1/chat/completions", {
       method: 'POST',
