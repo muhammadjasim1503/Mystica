@@ -6,9 +6,8 @@
 
 [dev]
   # Optional: settings for local development if needed
-  command = "npm run dev"
+  # command = "npm run dev"  # You can remove this if not using local development
   port = 8888
-
 
 [[plugins]]
   package = "@netlify/plugin-functions-core"
