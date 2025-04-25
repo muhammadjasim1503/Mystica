@@ -1,43 +1,45 @@
-// netlify/functions/quiz.js
+const fetch = require('node-fetch');  // Ensure that fetch is available
 
-const fetch = require("node-fetch");
-
-exports.handler = async (event) => {
+exports.handler = async function(event, context) {
   try {
+    // Extract data from the request body
     const { prompt, age, subject } = JSON.parse(event.body);
 
-    // Prepare the request body for AIML API
-    const requestData = {
-      model: "google/gemini-2.5-pro-preview", // You can change this if needed
-      messages: [
-        {
-          role: "user",
-          content: `Create a fun and simple quiz question for a ${age}-year-old student about ${subject}. Use this context: ${prompt}`
-        }
-      ]
-    };
-
+    // Send a POST request to the AIML API
     const response = await fetch("https://api.aimlapi.com/v1/chat/completions", {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.AIML_API_KEY}` // Use your AIML API key here
+        'Authorization': `Bearer ${process.env.AIML_API_KEY}`,  // Using your AIML API key
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(requestData)
+      body: JSON.stringify({
+        model: "google/gemini-2.5-pro-preview",  // Gemini model
+        messages: [{
+          role: 'user',
+          content: `Generate a fun ${subject} quiz question for a ${age} year old. Prompt: ${prompt}`
+        }]
+      })
     });
 
-    const data = await response.json();
-    const quizQuestion = data.choices && data.choices[0] ? data.choices[0].message.content : "Error generating quiz question.";
+    // Check if the request was successful
+    if (!response.ok) {
+      throw new Error('Failed to fetch data from AIML API');
+    }
 
+    // Parse the response from the AIML API
+    const data = await response.json();
+    const answer = data?.choices?.[0]?.message?.content ?? 'No response from Gemini';
+
+    // Return the quiz question as a response
     return {
       statusCode: 200,
-      body: JSON.stringify({ question: quizQuestion })
+      body: JSON.stringify({ answer })
     };
-  } catch (err) {
-    console.error("Error generating quiz question:", err);
+  } catch (error) {
+    console.error('Error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Failed to generate quiz question." })
+      body: JSON.stringify({ error: error.message })
     };
   }
 };
