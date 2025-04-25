@@ -1,0 +1,19 @@
+{
+  "name": "mystica",
+  "version": "1.0.0",
+  "description": "A fun quiz game using AIML API and Gemini model",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "node-fetch": "^3.0.0",    
+    "dotenv": "^16.0.0"        
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "16.x"  
+  },
+  "license": "ISC"
+}
