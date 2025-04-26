@@ -31,6 +31,14 @@
 
     <!-- Display the generated quiz question here -->
     <div id="quiz-output"></div>
+
+    <!-- Answer Form (hidden until question is generated) -->
+    <form id="answer-form" style="display:none; margin-top:20px;">
+      <label for="answer-input">Your Answer:</label>
+      <input type="text" id="answer-input" required>
+      <button type="submit">Submit Answer</button>
+    </form>
+    <div id="feedback" style="margin-top:10px;"></div>
   </div>
 
   <script src="script.js"></script> <!-- Link to your JavaScript -->
